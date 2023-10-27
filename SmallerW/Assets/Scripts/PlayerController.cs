@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject bulletPrefab;
+    public Transform firePoint;
     public float moveSpeed = 5.0f;
+    public float bulletSpeed = 10.0f;
+    public float fireRate = 3.0f; // Fire a bullet every 3 seconds
+    private float nextFireTime;
+
     public float rotationSpeed = 10.0f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        nextFireTime = Time.time + fireRate;
     }
 
     // Update is called once per frame
@@ -33,5 +39,19 @@ public class PlayerController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(lookAtPoint - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
+
+        // Check if it's time to shoot
+        if (Time.time >= nextFireTime)
+        {
+            Shoot();
+            nextFireTime = Time.time + fireRate;
+        }
     }
+
+    void Shoot()
+    {
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+    }
+
+
 }
