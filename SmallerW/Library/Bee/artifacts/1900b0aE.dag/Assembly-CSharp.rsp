@@ -364,6 +364,7 @@
 "Assets/Scripts/EnemySeekPlayer.cs"
 "Assets/Scripts/EnemySpawner.cs"
 "Assets/Scripts/HealthManager.cs"
+"Assets/Scripts/MainMenuController.cs"
 "Assets/Scripts/PlayerController.cs"
 -langversion:9.0
 
