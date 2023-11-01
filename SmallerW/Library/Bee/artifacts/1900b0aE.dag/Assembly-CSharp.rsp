@@ -367,6 +367,7 @@
 "Assets/Scripts/MainMenuController.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/PlayerXPManager.cs"
+"Assets/Scripts/SpawnPointManager.cs"
 -langversion:9.0
 
 /deterministic
