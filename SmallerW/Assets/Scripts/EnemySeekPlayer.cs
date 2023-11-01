@@ -8,6 +8,7 @@ public class EnemySeekPlayer : MonoBehaviour
     public Transform player; // Reference to the player's Transform
     private NavMeshAgent navMeshAgent;
     public float distanceToPlayer = 2.0f; // Adjust this to control the distance in front of the player
+    public float speed = 5.0f; // Speed of the enemy
 
     void Start()
     {
@@ -16,7 +17,11 @@ public class EnemySeekPlayer : MonoBehaviour
         {
             player = GameObject.FindWithTag("player").transform;
         }
+
+        // Set the NavMeshAgent's speed to the specified speed
+        navMeshAgent.speed = speed;
     }
+
 
     void Update()
     {

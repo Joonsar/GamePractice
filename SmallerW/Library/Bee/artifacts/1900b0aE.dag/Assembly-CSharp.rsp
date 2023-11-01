@@ -366,6 +366,7 @@
 "Assets/Scripts/HealthManager.cs"
 "Assets/Scripts/MainMenuController.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/PlayerXPManager.cs"
 -langversion:9.0
 
 /deterministic
