@@ -5,13 +5,18 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public GameObject bulletPrefab;
+    public GameObject laserPrefab;
     public Transform firePoint;
+
     public float moveSpeed = 5.0f;
     public float bulletSpeed = 5.0f;
+    public float laserSpeed = 10.0f;
     public float fireRate = 3.0f; // Fire a bullet every 3 seconds
+    public float laserRate = 6.0f; // Fire a laser every 6 seconds
     public float rotationSpeed = 10.0f;
 
     private float nextFireTime;
+    private float nextLaserTime;
     private Rigidbody rb;
     private PlayerXPManager playerXPManager;
 
@@ -19,9 +24,9 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         nextFireTime = Time.time + fireRate;
+        nextLaserTime = Time.time + laserRate;
         playerXPManager = FindObjectOfType<PlayerXPManager>();
     }
-
 
     void Update()
     {
@@ -51,12 +56,23 @@ public class PlayerController : MonoBehaviour
         {
             float fireRateIncreasePercentage = 0.10f; // 10% decrease in fire rate per level
             fireRate = 3.0f / (1.0f + fireRateIncreasePercentage * playerXPManager.level);
+            // Adjust laser rate based on level
+            float laserRateIncreasePercentage = 0.05f; // 5% decrease in laser rate per level
+            laserRate = 6.0f / (1.0f + laserRateIncreasePercentage * playerXPManager.level);
         }
-        // Check if it's time to shoot
+
+        // Check if it's time to shoot bullets
         if (Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + fireRate;
+        }
+
+        // Check if it's time to shoot lasers
+        if (Time.time >= nextLaserTime && playerXPManager != null && playerXPManager.level >= 2) // Adjust the minimum level required
+        {
+            ShootLaser();
+            nextLaserTime = Time.time + laserRate;
         }
     }
 
@@ -69,6 +85,33 @@ public class PlayerController : MonoBehaviour
         if (bulletController != null)
         {
             bulletController.bulletSpeed = bulletSpeed;
+        }
+    }
+
+    void ShootLaser()
+    {
+        // Instantiate and fire the laser
+        Vector3 laserSpawnOffset = firePoint.forward * 5.0f; // Adjust the offset as needed
+
+        // Calculate the spawn position for the laser
+        Vector3 laserSpawnPosition = firePoint.position + laserSpawnOffset;
+
+        // Instantiate and fire the laser at the calculated position
+        GameObject laser = Instantiate(laserPrefab, laserSpawnPosition, firePoint.rotation);
+
+        // Get the LaserController script and set any initial properties if needed
+        LaserController laserController = laser.GetComponent<LaserController>();
+        if (laserController != null)
+        {
+            // Set the initial laser speed
+            laserController.laserSpeed = laserSpeed;
+
+            // Calculate a random direction for the laser (adjust the range as needed)
+            Vector3 randomDirection = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+            randomDirection.Normalize(); // Normalize the direction vector
+
+            // Set the initial velocity of the laser
+            laserController.SetInitialVelocity(randomDirection);
         }
     }
 }

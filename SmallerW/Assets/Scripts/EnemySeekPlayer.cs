@@ -9,6 +9,7 @@ public class EnemySeekPlayer : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     public float distanceToPlayer = 2.0f; // Adjust this to control the distance in front of the player
     public float speed = 5.0f; // Speed of the enemy
+    public int damageAmount = 10;
 
     void Start()
     {
@@ -34,5 +35,28 @@ public class EnemySeekPlayer : MonoBehaviour
         // Set the destination of the NavMeshAgent to the calculated position
         navMeshAgent.SetDestination(destination);
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("player"))
+        {
+            // Check if the collision is with the player
+            HealthManager playerHealth = collision.gameObject.GetComponent<HealthManager>();
+
+            if (playerHealth != null)
+            {
+                // Apply damage to the player
+                playerHealth.TakeDamage(damageAmount);
+
+                if (playerHealth.currentHealth <= 0)
+                {
+                    // Player's health is <= 0, you can handle the player's defeat here
+                    playerHealth.Die();
+                }
+            }
+        }
+    }
+
+
 }
 

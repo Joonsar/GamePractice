@@ -49,7 +49,7 @@ public class HealthManager : MonoBehaviour
         currentHealth = Mathf.Min(currentHealth, maxHealth);
     }
 
-    void Die()
+    public void Die()
     {
         isDead = true;
 
